@@ -1,0 +1,185 @@
+<html>
+	<head>
+		<title>
+			tdlive &hearts; videos
+		</title>
+
+		<!--
+
+		music.html
+		Copyright (c) 2014 tdlive aw'sum <http://tdlive.me/music.html>
+
+		This software is licensed under the Eclipse Public License, available at
+		<https://www.eclipse.org/legal/epl-v10.html>.
+
+		-->
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+		<script type="text/javascript">
+
+			songs = [];
+			var origPlayHTML = [];
+			var popID;
+			var lightsAreOff = false;
+
+			var currentSongId;
+
+			var copyright = '<div id="sorry" style="float: right; border: 1px dotted red; background-color: orange; text-align: center; width: 560; height: 315;"><h3>Sorry about that! :(</h3>Due to copyright issues (ugh, lawyers), you can\'t play that song here.<br>However, you can click <a id="clickHere" target="_blank">here</a> to play it in a new tab.</div>';
+
+			function s(artist, name, youtube_url, pony, ext){
+				var arr = {};
+				arr.name = name;
+				arr.artist = artist;
+				arr.youtube_url = youtube_url;
+
+				if( ! ext ) arr.ext = false;
+				else arr.ext = true;
+
+				if( ! pony ) arr.pony = false;
+				else arr.pony = true;
+
+				songs.push(arr);
+			}
+
+			function populate(){
+				var thtml = $("#table").html();
+				songs.forEach(function(v,k){
+					thtml = thtml + "<tr id='play" + k + "'><td>" + v.name + "</td><td>" + v.artist + "</td><td><a href='http://youtube.com/watch?v=" + v.youtube_url + "'>></a><td id='song" + k + "'>";
+
+					if( ! v.ext ) thtml = thtml + "<a href='#play" + k + "' onClick='play(\"" + v["youtube_url"] + "\", " + k + ")'>></a></td>";
+					else thtml = thtml + "<a href='#play" + k + "' onClick='playAlt(\"" + v.youtube_url + "\")'>></a></td>";
+
+					if( v.pony ) thtml = thtml + "<td><img src='http://img4.wikia.nocookie.net/__cb20120315153941/mlp/images/f/f5/FANMADE_Twilight_Sparkle_Icon.png' alt='Ponies!' height=16 width=16 title='Ponies!'></img></td>";
+					else thtml = thtml + "<td></td>";
+
+					thtml = thtml + "</tr>";
+
+					$("#table").html(thtml);
+					origPlayHTML[k]=$("#song" + k).html();
+				});
+			}
+
+			function ch2evr(){
+
+				$("#ytplayer").html("<div style='background-color: white;'><iframe src='/everfree/' width=560 height=315 frameborder='0'></iframe><br><i>Everfree Radio</i></div>");
+
+			}
+
+			function play(id, popid){
+				$("#song" + popid).html("loading...");
+				popID=popid;
+
+				// clear iframe
+				$("#ytplayer").html("");
+
+				// add new iframe
+				$("#ytplayer").append($("<iframe id='yt' width=560 height=315 frameborder='0'></iframe><br><i>" + songs[popID].artist + " - " + songs[popID].name + "</i>"));
+				$("#yt").attr("src", "http://youtube.com/embed/" + id + "?autoplay=1&rel=0");
+
+				// bind
+				$("#yt").load(function(){
+					$("#song" + popID).html(origPlayHTML[popID]);
+				});
+
+			}
+
+			function playAlt(id){
+				$("#ytplayer").html(copyright);
+				$("#clickHere").attr("href", "http://youtube.com/watch?v=" + id);
+			}
+
+			function faq(){
+				container = $("#selectframe").html();
+
+        			var faqhtml = "<h2 style='text-align: center;'>FAQ</h2><b>Q:</b> Why is there no FAQ here?<br><b>A:</b> You haven't set one yet! Check out the faq() function.";
+
+				$("#selectframe").html(faqhtml);
+				changeLinkURL('songs');
+			}
+
+			function restoreContainer(){
+				$("#selectframe").html(container);
+				changeLinkURL('faq');
+			}
+
+			function lightsOff(){
+				if( ! lightsAreOff ){
+					$("body").css("background-color", "white");
+					$("body").css("color", "black");
+					lightsAreOff = true;
+				}
+				else{
+					$("body").css("background-color", "black");
+					$("body").css("color", "white");
+					lightsAreOff = false;
+				}
+			}
+
+			function playEverfree(){
+				$("#ytplayer").html("<iframe id='yt' height=335 width=580 src='http://everfree.net/popup/radio.php' frameborder=0></iframe>");
+			}
+
+			// I wish I had a reliable way to sort these :/ oh well
+
+      			// add a song
+      			//  artist            name                youtube id     pony?
+			//s("4everfreebrony", "Here on the Moon", "73xP-Ce-h7k", true);
+			
+			s("Rina-chan", "A Day at the Dentist", "WCA3STgVa64", true);
+
+			function changeLinkURL(to){
+				if ( to == "faq" ){
+					$("#link").html("FAQ");
+					$("#link").off("click");
+					$("#link").click(faq);
+				}
+				else {
+					$("#link").html("songs");
+					$("#link").off("click");
+					$("#link").click(restoreContainer);
+				}
+			}
+
+			function detectURL(){
+				if( window.location.hash.length > 5 && window.location.hash.slice(0,5) == "#play" ){
+					var sl=parseInt(window.location.hash.slice(5));
+					if( songs[sl] ) play(songs[sl].youtube_url, sl);
+					window.location.hash = window.location.hash;
+				}
+			}
+
+		</script>
+	</head>
+	<body onLoad="detectURL(); populate(); changeLinkURL('faq');" style="font-family: 'Helvetica'; padding: 20px; background-color: black; color: white;">
+		<h1 style="text-align: center;">
+			tdlive aw'sum &hearts;'s videos
+		</h1>
+		<div id="container">
+			<h3 style='text-align: center;'><a href="http://tdlive.me/">tdlive.me</a> | <a href="#" id="link"></a></h3>
+			<div id="ytplayer" style="float: right; border: 1px dotted black; text-align: center; width: 580; height: 335; padding: 10;">
+				<i>No songs selected. Select a song from the left to display it here!</i>
+			</div>
+			<div style="display: block; height: 355; overflow-y: scroll;" id="selectframe">
+				<table border=1 style="align: center; display: block; height: 352px; overflow-y: scroll;" align="center" id="table">
+					<thead>
+						<td>
+							<b>Name</b>
+						</td>
+						<td>
+							<b>Artist</b>
+						</td>
+						<td>
+							<img src="http://youtube.com/favicon.ico" title="YouTube" alt="YouTube"></img>
+						</td>
+						<td>
+						</td>
+						<td>
+							<img src="http://img4.wikia.nocookie.net/__cb20120315153941/mlp/images/f/f5/FANMADE_Twilight_Sparkle_Icon.png" height=16 width=16 title="Ponies!" alt="Ponies!"></img>
+					</thead>
+				</table>
+			</div>
+		</div>
+		<p style="text-align: center;">&copy; 2014. <a href="#" onClick="lightsOff();">Lights on/off?</a></p>
+	</body>
+</html>
