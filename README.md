@@ -1,7 +1,7 @@
 music.html
 ==========
 
-i ♥ music
+i ♥ music (made this in a few hours one day so there will probably be screw ups and stuff like that)
 
 [![working demo](https://i.imgur.com/fbWdC3d.jpg)](http://music.tdlive.me/)
 Click above for a working demo. *squee*
@@ -14,3 +14,7 @@ how to
 3. Upload/push
 4. ???
 5. Profit!!
+
+pr's and contributing
+=====================
+whatever, as long as it works and improves this
