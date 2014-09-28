@@ -33,11 +33,8 @@
 				arr.artist = artist;
 				arr.youtube_url = youtube_url;
 
-				if( ! ext ) arr.ext = false;
-				else arr.ext = true;
-
-				if( ! pony ) arr.pony = false;
-				else arr.pony = true;
+				arr.ext = ext || false;
+				arr.pony = pony || false;
 
 				songs.push(arr);
 			}
@@ -58,12 +55,6 @@
 					$("#table").html(thtml);
 					origPlayHTML[k]=$("#song" + k).html();
 				});
-			}
-
-			function ch2evr(){
-
-				$("#ytplayer").html("<div style='background-color: white;'><iframe src='/everfree/' width=560 height=315 frameborder='0'></iframe><br><i>Everfree Radio</i></div>");
-
 			}
 
 			function play(id, popid){
@@ -151,7 +142,7 @@
 	</head>
 	<body onLoad="detectURL(); populate(); changeLinkURL('faq');" style="font-family: 'Helvetica'; padding: 20px; background-color: black; color: white;">
 		<h1 style="text-align: center;">
-			tdlive aw'sum &hearts;'s music
+			I &hearts; music
 		</h1>
 		<div id="container">
 			<h3 style='text-align: center;'><a href="http://tdlive.me/">tdlive.me</a> | <a href="#" id="link"></a></h3>
@@ -174,6 +165,7 @@
 						</td>
 						<td>
 							<img src="http://img4.wikia.nocookie.net/__cb20120315153941/mlp/images/f/f5/FANMADE_Twilight_Sparkle_Icon.png" height=16 width=16 title="Ponies!" alt="Ponies!"></img>
+						</td>
 					</thead>
 				</table>
 			</div>
